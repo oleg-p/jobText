@@ -22,6 +22,11 @@
 		private $results = [];
 
 		/**
+		 * @var array
+		 */
+		private $result = [];
+
+		/**
 		 * Job constructor.
 		 * @param string $text
 		 * @param array  $methods
@@ -41,17 +46,37 @@
 			return new static($job->text, $job->methods);
 		}
 
+		/**
+		 * Паралелльная обработка
+		 */
 		public function run ()
 		{
 			$factory = new WorkerFactory();
 
-			foreach ($this->methods as $method)
-			{
+			foreach ($this->methods as $method)	{
 				/** @var WorkerInterface $worker */
 				$worker = $factory->createDynamically($method);
 
 				$this->results [] = ['text' => $worker->getResult($this->text)];
 			}
+		}
+
+		/**
+		 * Обработка по цепочке
+		 */
+		public function runChain ()
+		{
+			$factory = new WorkerFactory();
+
+			$text = $this->text;
+			foreach ($this->methods as $method)	{
+				/** @var WorkerInterface $worker */
+				$worker = $factory->createDynamically($method);
+
+				$text = $worker->getResult($text);
+			}
+
+			$this->result = ['text' => $text];
 		}
 
 		/**
@@ -61,4 +86,13 @@
 		{
 			return $this->results;
 		}
+
+		/**
+		 * @return array
+		 */
+		public function getResult () : array
+		{
+			return $this->result;
+		}
+
 	}

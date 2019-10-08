@@ -8,7 +8,7 @@
 		{
 			preg_match('|\d+|', $text, $matches);
 
-			return $matches[0];
+			return (int) $matches[0];
 
 		}
 	}

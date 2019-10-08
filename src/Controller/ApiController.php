@@ -18,6 +18,28 @@
 	class ApiController extends AbstractController
 	{
 		/**
+		 * @Route("/api/job-chain", name="api_job-chain", methods={"GET"}),
+		 */
+		public function jobChain(Request $request)
+		{
+			$data = $this->retrieveData($request);
+
+			$jsonJob = json_decode($data);
+
+			if (!empty($jsonJob)) {
+				/** @var Job $job */
+				$job = Job::create($jsonJob->job);
+				$job->runChain();
+
+
+				return $this->json( $job->getResult());
+			}
+
+			return $this->json([
+				'result' => 'Неверные данные',
+			]);
+		}
+		/**
 		 * @Route("/api/job", name="api_job", methods={"GET"}),
 		 */
 		public function job(Request $request)
