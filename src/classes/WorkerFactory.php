@@ -52,6 +52,7 @@
 		 * Создание класса обработчика типу с динамическим формированием наименования класса
 		 * Наименование класса должно быть равно наименованию типа, начинающейся с прописной буквы
 		 * Файл класса должен быть расположен в папке src\classes\WorkerFactory.php и иметь namespace App\classes\workers;
+		 * Файл должен реализовывать интерфейс App\classes\workers\WorkerInterface
 		 *
 		 * @param string $type
 		 * @return WorkerInterface
